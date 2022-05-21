@@ -122,4 +122,3 @@ for(int i=0;i<Input["comm.time"].length();i+=2)
     cout<<Max_time<<endl;
   
 }
-
