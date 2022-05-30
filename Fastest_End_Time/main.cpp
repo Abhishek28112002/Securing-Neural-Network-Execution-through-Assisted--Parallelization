@@ -1,10 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-bool sortbysec(const pair<int, int> &a,
-			   const pair<int, int> &b)
-{
-	return (a.second < b.second);
-}
+
 int main()
 {
 	// variables for our input
@@ -24,6 +20,8 @@ int main()
 	int n = num;
 	int count_input = 0;
 	int count1 = 0;
+
+	// taking input
 	while (in.eof() == 0)
 	{
 		in >> num;
@@ -71,16 +69,11 @@ int main()
 
 	// main algorithm start from here
 
-	// sorted the runtime of hgc in descending order
-	sort(Hgc_time.begin(), Hgc_time.end());
-	reverse(Hgc_time.begin(), Hgc_time.end());
-	sort(Hgc_time.begin(), Hgc_time.begin() + No_hgc, sortbysec);
-
 	// time is like how much time it will take in that step
 	long long int Max_time = 0, Time = 0;
 
 	// i have made this to take care of no of hgc's after uses we will increase no of hgc's
-	vector<long long int> Totaltime;
+	vector<pair<int, long long int>> Hgc_Totaltime;
 
 	// threepctime take care of threepctime of pervious running layers till that step
 	long long int threepctime = 0;
@@ -92,9 +85,24 @@ int main()
 		threepctime += it.second;
 		Threepc_timei[it.first] = threepctime;
 	}
-	// we also need to track of free hgc, so these two wil track of time that hgc will take to free
-	long long timerem_tofree = INT_MAX, freetime = 0;
 	for (auto it : Hgc_time)
+	{
+		// adding the threepc time till now
+		Time = 0;
+		if (it.second != 0)
+		{
+			// add the tiem of just previous layer and comm. time
+			Time += Threepc_timei[it.second - 1] + Comm_time[it.second - 1];
+		}
+		Time += it.first;
+		Hgc_Totaltime.push_back({Time, it.second});
+	}
+	sort(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
+	reverse(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
+
+	long long timerem_tofree = INT_MAX, freetime = 0, updated_Totaltime = 0;
+	// no of hgc
+	for (auto it : Hgc_Totaltime)
 	{
 
 		// adding the threepc time till now
@@ -106,42 +114,44 @@ int main()
 		}
 
 		// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one
-		for (auto it : Totaltime)
+		for (auto ip : Hgc_Totaltime)
 		{
 			// if time is greater then there total time then this will free
-			if (it <= Time)
+			if (ip.first < it.first)
 			{
-				No_hgc++;
+				if (ip.first <= Time)
+				{
+					No_hgc++;
 
-				// break here we need only 1 hgc at this point of time and we dont know about others time ,will more or less
-				break;
+					// break here we need only 1 hgc at this point of time and we dont know about others time ,will more or less
+					break;
 
-				// updating its totalrun time because this already free and used for this step so we won't count this
-				it = -1;
+					// updating its totalrun time because this already free and used for this step so we won't count this
+					ip.first = -1;
+				}
+				// if no hgc will free then tha min time we have to wait
+				freetime = Time - ip.first;
+				timerem_tofree = min(timerem_tofree, freetime);
 			}
-			// if no hgc will free then tha min time we have to wait
-			freetime = Time - it;
-			timerem_tofree = min(timerem_tofree, freetime);
+			else
+				break;
 		}
 		if (No_hgc == 0)
 		{
 			// if hgc's are 0 then till how much time this have to wait
-			Time += timerem_tofree;
-
+			it.first += timerem_tofree;
 			// updating to its true value
 			timerem_tofree = INT_MAX, freetime = 0;
 
 			// updating no f hgc
 			No_hgc++;
 		}
-		Time += it.first;
-		Totaltime.push_back(Time);
 
 		// updating no of hgc
 		No_hgc -= 1;
-
+		updated_Totaltime = it.first;
 		// updating  time
-		Max_time = max(Max_time, Time);
+		Max_time = max(Max_time, updated_Totaltime);
 	}
 
 	cout << Max_time << endl;
