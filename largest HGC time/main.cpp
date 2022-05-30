@@ -5,6 +5,7 @@ int main()
 	//variables for our input 
  unordered_map<int,int>Layers;
  unordered_map<int,int>threepc_time;
+ //unordered_map<int,int>Hgc_t;
  vector<pair<int,int>>Hgc_time;
  unordered_map<int,int>Comm_time;
  long long int No_hgc;
@@ -53,6 +54,7 @@ for(int i=0;i<Input["comm.time"].length();i+=2)
   
 //sorted the runtime of hgc in descending order
   sort(Hgc_time.begin(),Hgc_time.end(),greater<int>());
+  //greater<int>() for descending int sorting
   
 //time is like how much time it will take in that step
   long long int Max_time=0,Time=0; 
