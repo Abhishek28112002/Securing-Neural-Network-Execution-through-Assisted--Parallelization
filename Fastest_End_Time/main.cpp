@@ -18,7 +18,7 @@ int main()
 	int num;
 	in >> num;
 	int n = num;
-	int count_input = 0;
+	int count_input = 1;
 	int count1 = 0;
 
 	// taking input
@@ -28,11 +28,7 @@ int main()
 		if (n > 0)
 		{
 			n--;
-			if (count_input == 0)
-			{
-				Layers[count1] = num;
-			}
-			else if (count_input == 1)
+			 if (count_input == 1)
 			{
 				threepc_time[count1] = num;
 			}
@@ -47,7 +43,7 @@ int main()
 			else
 				No_hgc = num;
 			count1++;
-		}
+		} 
 		else
 			n = num, count1 = 0, count_input++;
 	}
@@ -82,8 +78,9 @@ int main()
 	unordered_map<long long int, long long int> Threepc_timei;
 	for (auto it : threepc_time)
 	{
-		threepctime += it.second;
 		Threepc_timei[it.first] = threepctime;
+		threepctime += it.second;
+		
 	}
 	for (auto it : Hgc_time)
 	{

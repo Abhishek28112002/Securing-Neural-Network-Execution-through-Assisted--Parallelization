@@ -22,19 +22,17 @@ int main()
 	int num;
 	in >> num;
 	int n = num;
-	int count_input = 0;
+	int count_input = 1;
 	int count1 = 0;
+
+	// taking input
 	while (in.eof() == 0)
 	{
 		in >> num;
 		if (n > 0)
 		{
 			n--;
-			if (count_input == 0)
-			{
-				Layers[count1] = num;
-			}
-			else if (count_input == 1)
+			 if (count_input == 1)
 			{
 				threepc_time[count1] = num;
 			}
@@ -89,8 +87,8 @@ int main()
 	unordered_map<long long int, long long int> Threepc_timei;
 	for (auto it : threepc_time)
 	{
-		threepctime += it.second;
 		Threepc_timei[it.first] = threepctime;
+		threepctime += it.second;
 	}
 	// we also need to track of free hgc, so these two wil track of time that hgc will take to free
 	long long timerem_tofree = INT_MAX, freetime = 0;
