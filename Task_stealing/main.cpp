@@ -21,7 +21,7 @@ int main()
 	int count_input = 1;
 	int count1 = 0;
 
-// taking input
+	// taking input
 	// input file formate 
 	// no of layers Three pc time
 	// no of layers Hgc time
@@ -99,8 +99,6 @@ int main()
 		Time += it.first;
 		Hgc_Totaltime.push_back({Time, it.second});
 	}
-	sort(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
-	reverse(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
 
 	long long timerem_tofree = INT_MAX, freetime = 0, updated_Totaltime = 0,index=-1;
 	// no of hgc
