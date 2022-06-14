@@ -81,11 +81,10 @@ int main()
 
 	// calculation of 3pc time till i th layer;
 	unordered_map<long long int, long long int> Threepc_timei;
-	for (auto it : threepc_time)
+	for (int i=0;i<threepc_time.size();i++)
 	{
-		Threepc_timei[it.first] = threepctime;
-		threepctime += it.second;
-		
+		Threepc_timei[i] = threepctime;
+		threepctime += threepc_time[i];
 	}
 	for (auto it : Hgc_time)
 	{
@@ -94,7 +93,7 @@ int main()
 		if (it.second != 0)
 		{
 			// add the tiem of just previous layer and comm. time
-			Time += Threepc_timei[it.second - 1] + Comm_time[it.second - 1];
+			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
 		}
 		Time += it.first;
 		Hgc_Totaltime.push_back({Time, it.second});

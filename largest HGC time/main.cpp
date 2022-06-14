@@ -52,20 +52,21 @@ int main()
 			n = num, count1 = 0, count_input++;
 	}
 
-	// //checking input captured is right or wrong.
-	// for(auto it:Layers)
-	// cout<<it.first<<" "<<it.second<<endl;
-	// cout<<endl;
-	// for(auto it:threepc_time)
-	// cout<<it.first<<" "<<it.second<<endl;
-	// cout<<endl;
-	// for(auto it:Hgc_time)
-	// cout<<it.first<<" "<<it.second<<endl;
-	// cout<<endl;
-	// for(auto it:Comm_time)
-	// cout<<it.first<<" "<<it.second<<endl;
-	// cout<<endl;
-	// cout<<No_hgc<<endl;
+	//checking input captured is right or wrong.
+	cout<<"Threepc_time ";
+	for(auto it:threepc_time)
+	cout<<it.first<<" "<<it.second<<endl;
+	cout<<endl;
+cout<<"HGC TIME  ";
+	for(auto it:Hgc_time)
+	cout<<it.first<<" "<<it.second<<endl;
+	cout<<endl;
+	cout<<"Comm_time :";
+	for(auto it:Comm_time)
+	cout<<it.first<<" "<<it.second<<endl;
+	cout<<endl;
+	cout<<"NO of hgc :";
+	cout<<No_hgc<<endl;
 
 	// main algorithm start from here
 
@@ -85,11 +86,14 @@ int main()
 
 	// calculation of 3pc time till i th layer;
 	unordered_map<long long int, long long int> Threepc_timei;
-	for (auto it : threepc_time)
+	for (int i=0;i<threepc_time.size();i++)
 	{
-		Threepc_timei[it.first] = threepctime;
-		threepctime += it.second;
+		Threepc_timei[i] = threepctime;
+		threepctime += threepc_time[i];
 	}
+	cout<<"Three pc till i th year";
+	for(auto it:Threepc_timei)
+	cout<<it.first<<" "<<it.second<<endl;
 	// we also need to track of free hgc, so these two wil track of time that hgc will take to free
 	long long timerem_tofree = INT_MAX, freetime = 0;
 	for (auto it : Hgc_time)
@@ -100,7 +104,7 @@ int main()
 		if (it.second != 0)
 		{
 			// add the tiem of just previous layer and comm. time
-			Time += Threepc_timei[it.second - 1] + Comm_time[it.second - 1];
+			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
 		}
 
 		// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one
