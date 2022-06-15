@@ -110,7 +110,7 @@ int main()
 		if (it.second != 0)
 		{
 			// add the tiem of just previous layer and comm. time
-			Time += Threepc_timei[it.second - 1] + Comm_time[it.second - 1];
+			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
 		}
 
 		// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one

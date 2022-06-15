@@ -8,7 +8,6 @@ bool sortbysec(const pair<int, int> &a,
 int main()
 {
 	// variables for our input
-	unordered_map<int, int> Layers;
 	unordered_map<int, int> threepc_time;
 	vector<pair<int, int>> Hgc_time;
 	unordered_map<int, int> Comm_time;
