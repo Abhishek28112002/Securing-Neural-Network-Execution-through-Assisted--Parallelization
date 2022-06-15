@@ -113,6 +113,7 @@ int main()
 			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
 		}
 
+		int hgc_index=0;
 		// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one
 		for (auto ip : Hgc_Totaltime)
 		{
@@ -125,8 +126,8 @@ int main()
 
 					
 
-					// updating its total run time because this already free and used for this step so we won't count this
-					ip.first = -1;
+					// updating its totalrun time because this already free and used for this step so we won't count this
+					Hgc_Totaltime.erase(Hgc_Totaltime.begin()+hgc_index);
 
 					// break here we need only 1 hgc at this point of time and we dont know about others time ,will more or less
 					break;
@@ -138,6 +139,7 @@ int main()
 					index++;
 				}
 				timerem_tofree = min(timerem_tofree, freetime);
+				hgc_index++;
 			}
 			else
 				break;
@@ -147,7 +149,7 @@ int main()
 			// if hgc's are 0 then till how much time this have to wait
 			it.first += timerem_tofree;
 // updating hgc time also
-           Hgc_Totaltime[index].first=-1;
+           Hgc_Totaltime.erase(Hgc_Totaltime.begin()+index);
 
 			// updating to its true value
 			timerem_tofree = INT_MAX, freetime = 0;

@@ -16,7 +16,7 @@ int main()
 	// //ready to take input from input's file
 	unordered_map<string, string> Input;
 	ifstream in;
-	in.open("Input1.txt");
+	in.open("Input11.txt");
 	string name, array;
 	int num;
 	in >> num;
@@ -94,7 +94,7 @@ cout<<"HGC TIME  ";
 	for(auto it:Threepc_timei)
 	cout<<it.first<<" "<<it.second<<endl;
 	// we also need to track of free hgc, so these two wil track of time that hgc will take to free
-	long long timerem_tofree = INT_MAX, freetime = 0;
+	long long timerem_tofree = INT_MAX, freetime = 0,index=-1;
 	for (auto it : Hgc_time)
 	{
 
@@ -107,22 +107,26 @@ cout<<"HGC TIME  ";
 		}
 
 		// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one
+		int hgc_index=0;
 		for (auto it : Totaltime)
 		{
 			// if time is greater then there total time then this will free
 			if (it <= Time)
 			{
 				No_hgc++;
-
+				// updating its totalrun time because this already free and used for this step so we won't count this
+				Totaltime.erase(Totaltime.begin()+hgc_index);
 				// break here we need only 1 hgc at this point of time and we dont know about others time ,will more or less
 				break;
-
-				// updating its totalrun time because this already free and used for this step so we won't count this
-				it = -1;
 			}
 			// if no hgc will free then tha min time we have to wait
 			freetime = Time - it;
+			if(freetime<timerem_tofree)
+				{
+					index++;
+				}
 			timerem_tofree = min(timerem_tofree, freetime);
+			hgc_index++;
 		}
 		if (No_hgc == 0)
 		{
@@ -134,6 +138,7 @@ cout<<"HGC TIME  ";
 
 			// updating no f hgc
 			No_hgc++;
+			
 		}
 		Time += it.first;
 		Totaltime.push_back(Time);
