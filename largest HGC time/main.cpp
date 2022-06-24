@@ -102,7 +102,7 @@ cout<<"HGC TIME  ";
 		Time = 0;
 		if (it.second != 0)
 		{
-			// add the tiem of just previous layer and comm. time
+			// add the time of just previous layer and comm. time
 			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
 		}
 

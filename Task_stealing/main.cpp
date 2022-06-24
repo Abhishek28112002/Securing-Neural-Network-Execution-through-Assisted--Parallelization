@@ -121,8 +121,6 @@ int hgc_index=0;
 				{
 					No_hgc++;
 
-					
-
 					// updating its totalrun time because this already free and used for this step so we won't count this
 					Hgc_Totaltime.erase(Hgc_Totaltime.begin()+hgc_index);
 

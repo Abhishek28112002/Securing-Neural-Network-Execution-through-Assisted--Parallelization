@@ -12,7 +12,7 @@ int main()
 	// //ready to take input from input's file
 	unordered_map<string, string> Input;
 	ifstream in;
-	in.open("Input1.txt");
+	in.open("Reso_200_800.txt");
 	string name, array;
 	int num;
 	in >> num;
