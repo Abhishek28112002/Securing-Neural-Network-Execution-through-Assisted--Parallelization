@@ -5,6 +5,10 @@ import csv
 for networknum in range(1,7):
     for frequency_l_core in range(1,5):
         for frequency_b_core in range(1,5):
+            if frequency_l_core==3 and frequency_b_core==1:
+                continue
+            if frequency_l_core==4 and frequency_b_core==1 or frequency_b_core==2:
+                continue
             nnetwork= networknum*4 -5
             line_number_lcore= nnetwork + frequency_l_core
             line_number_bcore= nnetwork + frequency_b_core + 6*4 
@@ -61,7 +65,10 @@ for networknum in range(1,7):
             name=network_name+'_'+lower_frequencies+'_'+higher_frequencies
             filename="%s.txt" % name
             print(filename)
-            
+            with open('input/Result.csv','a') as f:
+               writer=csv.writer(f)
+               writer.writerow(str(network_name))
+            f.close()
             with open('input/'+filename, 'w') as f:
                 f.write(str(nlayers) + ' ')
                 for i in tpc:
@@ -75,6 +82,7 @@ for networknum in range(1,7):
                 for i in tcomm:
                     f.write(str(i)+ ' ')
                 f.write("\n")
+            f.close()
             
 
 

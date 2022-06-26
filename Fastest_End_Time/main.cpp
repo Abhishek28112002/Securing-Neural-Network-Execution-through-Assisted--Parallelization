@@ -12,7 +12,7 @@ int main()
 	// //ready to take input from input's file
 	unordered_map<string, string> Input;
 	ifstream in;
-	in.open("Reso_200_800.txt");
+	in.open("resnet18_200_800.txt");
 	string name, array;
 	int num;
 	in >> num;
@@ -20,8 +20,8 @@ int main()
 	int count_input = 1;
 	int count1 = 0;
 
-// taking input
-	// input file formate 
+	// taking input
+	// input file formate
 	// no of layers Three pc time
 	// no of layers Hgc time
 	// no of layers comm time
@@ -32,7 +32,7 @@ int main()
 		if (n > 0)
 		{
 			n--;
-			 if (count_input == 1)
+			if (count_input == 1)
 			{
 				threepc_time[count1] = num;
 			}
@@ -47,7 +47,7 @@ int main()
 			else
 				No_hgc = num;
 			count1++;
-		} 
+		}
 		else
 			n = num, count1 = 0, count_input++;
 	}
@@ -80,7 +80,7 @@ int main()
 
 	// calculation of 3pc time till i th layer;
 	unordered_map<long long int, long long int> Threepc_timei;
-	for (int i=0;i<threepc_time.size();i++)
+	for (int i = 0; i < threepc_time.size(); i++)
 	{
 		Threepc_timei[i] = threepctime;
 		threepctime += threepc_time[i];
@@ -100,7 +100,7 @@ int main()
 	sort(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
 	reverse(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
 
-	long long timerem_tofree = INT_MAX, freetime = 0, updated_Totaltime = 0,index=-1;
+	long long timerem_tofree = INT_MAX, freetime = 0, updated_Totaltime = 0, index = -1;
 	// no of hgc
 	for (auto it : Hgc_Totaltime)
 	{
@@ -113,7 +113,7 @@ int main()
 			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
 		}
 
-		int hgc_index=0;
+		int hgc_index = 0;
 		// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one
 		for (auto ip : Hgc_Totaltime)
 		{
@@ -123,18 +123,15 @@ int main()
 				if (ip.first <= Time)
 				{
 					No_hgc++;
-
-					
-
 					// updating its totalrun time because this already free and used for this step so we won't count this
-					Hgc_Totaltime.erase(Hgc_Totaltime.begin()+hgc_index);
+					Hgc_Totaltime.erase(Hgc_Totaltime.begin() + hgc_index);
 
 					// break here we need only 1 hgc at this point of time and we dont know about others time ,will more or less
 					break;
 				}
 				// if no hgc will free then tha min time we have to wait
 				freetime = Time - ip.first;
-				if(freetime<timerem_tofree)
+				if (freetime < timerem_tofree)
 				{
 					index++;
 				}
@@ -148,8 +145,8 @@ int main()
 		{
 			// if hgc's are 0 then till how much time this have to wait
 			it.first += timerem_tofree;
-// updating hgc time also
-           Hgc_Totaltime.erase(Hgc_Totaltime.begin()+index);
+			// updating hgc time also
+			Hgc_Totaltime.erase(Hgc_Totaltime.begin() + index);
 
 			// updating to its true value
 			timerem_tofree = INT_MAX, freetime = 0;
