@@ -7,8 +7,11 @@ for networknum in range(1,7):
         for frequency_b_core in range(1,5):
             if frequency_l_core==3 and frequency_b_core==1:
                 continue
-            if frequency_l_core==4 and frequency_b_core==1 or frequency_b_core==2:
+            if frequency_l_core==4 and frequency_b_core==1:
                 continue
+            else:
+                if frequency_l_core==4 and frequency_b_core==2:
+                  continue
             nnetwork= networknum*4 -5
             line_number_lcore= nnetwork + frequency_l_core
             line_number_bcore= nnetwork + frequency_b_core + 6*4 
@@ -30,6 +33,18 @@ for networknum in range(1,7):
                 tpc[i]=int(data_h[i+4])
             # print(nlayers,thgc,tpc)
 
+
+            network_name=str(data_l[0])
+            lower_frequencies=str(data_l[2])
+            higher_frequencies=str(data_h[2])
+            name=network_name+'_'+lower_frequencies+'_'+higher_frequencies
+            filename="%s.txt" % name
+            print(filename)
+
+
+
+
+
             with open("./File_Read/network_shapes.csv","r") as file:
                 data = file.readlines()
             file.close()
@@ -41,7 +56,7 @@ for networknum in range(1,7):
                 data= file.readlines()
             file.close()
 
-            lno= nnetwork + frequency_b_core + 2
+            lno= frequency_l_core*4  + frequency_b_core -3
 
             comm=data[lno].split(',')
             #print(comm)
@@ -59,12 +74,7 @@ for networknum in range(1,7):
                     else:
                         num= num*2
                         c=c+1
-            network_name=str(data_l[0])
-            lower_frequencies=str(data_l[2])
-            higher_frequencies=str(data_h[2])
-            name=network_name+'_'+lower_frequencies+'_'+higher_frequencies
-            filename="%s.txt" % name
-            print(filename)
+           
             with open('input/Result.csv','a') as f:
                writer=csv.writer(f)
                writer.writerow(str(network_name))
@@ -82,6 +92,7 @@ for networknum in range(1,7):
                 for i in tcomm:
                     f.write(str(i)+ ' ')
                 f.write("\n")
+                f.write('1 2')
             f.close()
             
 
