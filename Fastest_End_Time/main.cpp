@@ -4,6 +4,13 @@ using namespace std;
 int main()
 {
 	// variables for our input
+	ifstream ip;
+	ip.open("Result.txt");
+	
+	while(ip.eof() == 0)
+	{
+		string filename;
+		ip>>filename;
 	unordered_map<int, int> threepc_time;
 	vector<pair<int, int>> Hgc_time;
 	unordered_map<int, int> Comm_time;
@@ -12,7 +19,7 @@ int main()
 	// //ready to take input from input's file
 	unordered_map<string, string> Input;
 	ifstream in;
-	in.open("resnet18_200_800.txt");
+	in.open(filename);
 	string name, array;
 	int num;
 	in >> num;
@@ -29,8 +36,6 @@ int main()
 	while (in.eof() == 0)
 	{
 		in >> num;
-		cout<<num<<" ";
-		cout<<n<<" "<<count1<<endl;
 		if (n > 0)
 		{
 			n--;
@@ -56,111 +61,112 @@ int main()
 	}
 
 	//checking input captured is right or wrong.
-	for(auto it:threepc_time)
-	cout<<it.first<<" "<<it.second<<endl;
-	cout<<endl;
-	for(auto it:Hgc_time)
-	cout<<it.first<<" "<<it.second<<endl;
-	cout<<endl;
-	for(auto it:Comm_time)
-	cout<<it.first<<" "<<it.second<<endl;
-	cout<<endl;
-	cout<<No_hgc<<endl;
+	// for(auto it:threepc_time)
+	// cout<<it.first<<" "<<it.second<<endl;
+	// cout<<endl;
+	// for(auto it:Hgc_time)
+	// cout<<it.first<<" "<<it.second<<endl;
+	// cout<<endl;
+	// for(auto it:Comm_time)
+	// cout<<it.first<<" "<<it.second<<endl;
+	// cout<<endl;
+	// cout<<No_hgc<<endl;
 
 	// main algorithm start from here
 
 	// time is like how much time it will take in that step
-	// long long int Max_time = 0, Time = 0;
+	long long int Max_time = 0, Time = 0;
 
-	// // i have made this to take care of no of hgc's after uses we will increase no of hgc's
-	// vector<pair<int, long long int>> Hgc_Totaltime;
+	// i have made this to take care of no of hgc's after uses we will increase no of hgc's
+	vector<pair<int, long long int>> Hgc_Totaltime;
 
-	// // threepctime take care of threepctime of pervious running layers till that step
-	// long long int threepctime = 0;
+	// threepctime take care of threepctime of pervious running layers till that step
+	long long int threepctime = 0;
 
-	// // calculation of 3pc time till i th layer;
-	// unordered_map<long long int, long long int> Threepc_timei;
-	// for (int i = 0; i < threepc_time.size(); i++)
-	// {
-	// 	Threepc_timei[i] = threepctime;
-	// 	threepctime += threepc_time[i];
-	// }
-	// for (auto it : Hgc_time)
-	// {
-	// 	// adding the threepc time till now
-	// 	Time = 0;
-	// 	if (it.second != 0)
-	// 	{
-	// 		// add the tiem of just previous layer and comm. time
-	// 		Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
-	// 	}
-	// 	Time += it.first;
-	// 	Hgc_Totaltime.push_back({Time, it.second});
-	// }
-	// sort(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
-	// reverse(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
+	// calculation of 3pc time till i th layer;
+	unordered_map<long long int, long long int> Threepc_timei;
+	for (int i = 0; i < threepc_time.size(); i++)
+	{
+		Threepc_timei[i] = threepctime;
+		threepctime += threepc_time[i];
+	}
+	for (auto it : Hgc_time)
+	{
+		// adding the threepc time till now
+		Time = 0;
+		if (it.second != 0)
+		{
+			// add the tiem of just previous layer and comm. time
+			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
+		}
+		Time += it.first;
+		Hgc_Totaltime.push_back({Time, it.second});
+	}
+	sort(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
+	reverse(Hgc_Totaltime.begin(), Hgc_Totaltime.end());
 
-	// long long timerem_tofree = INT_MAX, freetime = 0, updated_Totaltime = 0, index = -1;
-	// // no of hgc
-	// for (auto it : Hgc_Totaltime)
-	// {
+	long long timerem_tofree = INT_MAX, freetime = 0, updated_Totaltime = 0, index = -1;
+	// no of hgc
+	for (auto it : Hgc_Totaltime)
+	{
 
-	// 	// adding the threepc time till now
-	// 	Time = 0;
-	// 	if (it.second != 0)
-	// 	{
-	// 		// add the tiem of just previous layer and comm. time
-	// 		Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
-	// 	}
+		// adding the threepc time till now
+		Time = 0;
+		if (it.second != 0)
+		{
+			// add the tiem of just previous layer and comm. time
+			Time += Threepc_timei[it.second] + Comm_time[it.second - 1];
+		}
 
-	// 	int hgc_index = 0;
-	// 	// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one
-	// 	for (auto ip : Hgc_Totaltime)
-	// 	{
-	// 		// if time is greater then there total time then this will free
-	// 		if (ip.first < it.first)
-	// 		{
-	// 			if (ip.first <= Time)
-	// 			{
-	// 				No_hgc++;
-	// 				// updating its totalrun time because this already free and used for this step so we won't count this
-	// 				Hgc_Totaltime.erase(Hgc_Totaltime.begin() + hgc_index);
+		int hgc_index = 0;
+		// consdering there is no hgc's left(because if at last totaltime of hgc will less comapre to this then, the persent one can use the free hgc now and save for that one
+		for (auto ip : Hgc_Totaltime)
+		{
+			// if time is greater then there total time then this will free
+			if (ip.first < it.first)
+			{
+				if (ip.first <= Time)
+				{
+					No_hgc++;
+					// updating its totalrun time because this already free and used for this step so we won't count this
+					Hgc_Totaltime.erase(Hgc_Totaltime.begin() + hgc_index);
 
-	// 				// break here we need only 1 hgc at this point of time and we dont know about others time ,will more or less
-	// 				break;
-	// 			}
-	// 			// if no hgc will free then tha min time we have to wait
-	// 			freetime = Time - ip.first;
-	// 			if (freetime < timerem_tofree)
-	// 			{
-	// 				index++;
-	// 			}
-	// 			timerem_tofree = min(timerem_tofree, freetime);
-	// 			hgc_index++;
-	// 		}
-	// 		else
-	// 			break;
-	// 	}
-	// 	if (No_hgc == 0)
-	// 	{
-	// 		// if hgc's are 0 then till how much time this have to wait
-	// 		it.first += timerem_tofree;
-	// 		// updating hgc time also
-	// 		Hgc_Totaltime.erase(Hgc_Totaltime.begin() + index);
+					// break here we need only 1 hgc at this point of time and we dont know about others time ,will more or less
+					break;
+				}
+				// if no hgc will free then tha min time we have to wait
+				freetime = Time - ip.first;
+				if (freetime < timerem_tofree)
+				{
+					index++;
+				}
+				timerem_tofree = min(timerem_tofree, freetime);
+				hgc_index++;
+			}
+			else
+				break;
+		}
+		if (No_hgc == 0)
+		{
+			// if hgc's are 0 then till how much time this have to wait
+			it.first += timerem_tofree;
+			// updating hgc time also
+			Hgc_Totaltime.erase(Hgc_Totaltime.begin() + index);
 
-	// 		// updating to its true value
-	// 		timerem_tofree = INT_MAX, freetime = 0;
+			// updating to its true value
+			timerem_tofree = INT_MAX, freetime = 0;
 
-	// 		// updating no f hgc
-	// 		No_hgc++;
-	// 	}
+			// updating no f hgc
+			No_hgc++;
+		}
 
-	// 	// updating no of hgc
-	// 	No_hgc -= 1;
-	// 	updated_Totaltime = it.first;
-	// 	// updating  time
-	// 	Max_time = max(Max_time, updated_Totaltime);
-	// }
+		// updating no of hgc
+		No_hgc -= 1;
+		updated_Totaltime = it.first;
+		// updating  time
+		Max_time = max(Max_time, updated_Totaltime);
+	}
 
-	// cout << Max_time << endl;
+	cout << Max_time << endl;
+	}
 }

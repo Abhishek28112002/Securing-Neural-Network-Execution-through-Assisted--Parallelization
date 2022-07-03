@@ -75,9 +75,9 @@ for networknum in range(1,7):
                         num= num*2
                         c=c+1
            
-            with open('input/Result.csv','a') as f:
-               writer=csv.writer(f)
-               writer.writerow(str(network_name))
+            with open('input/Result.txt','a') as f:
+               f.write(str(filename))
+               f.write("\n")
             f.close()
             with open('input/'+filename, 'w') as f:
                 f.write(str(nlayers) + ' ')
